@@ -42,7 +42,7 @@ export default function Homepage() {
               type="text"
               value={mood}
               onChange={(e) => setMood(e.target.value)}
-              placeholder="How are you feeling today?"
+              placeholder="What's the mood for today?"
               className="mood-input"
               disabled={isSearching}
             />
