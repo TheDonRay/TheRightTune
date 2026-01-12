@@ -18,11 +18,14 @@ export default function Homepage() {
           }); 
         } 
 
-        const sendtoDj = await fetch(`http://localhost:2323/api/v1/dj?mood=${encodeURIComponent(mood)}`, { 
-          method: 'GET', 
+        const sendtoDj = await fetch(`http://localhost:2323/api/v1/dj`, { 
+          method: 'POST', 
           headers: { 
             'Content': 'application/json'
-          }
+          }, 
+          body: JSON.stringify({ 
+            usermood: mood
+          })
         }); 
         // backend response here as such 
         const backendResponse = await sendtoDj.json(); 
