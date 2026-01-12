@@ -7,12 +7,11 @@ const aidj = async (req, res) => {
     // for now just for testing purposes we can start of with   
     // remember get requests should not have body params, so like waht you had before it should not have that req.body from the mood 
     try { 
-        const { mood } = req.query;  
+        const { usermood } = req.body;  
         res.status(200).json({ 
-            backendResponse: mood
+            backendResponse: usermood
         }); 
-        console.log('backend said: ', mood); 
-
+        console.log('backend said:', usermood); 
     } catch (error) { 
         res.status(500).json({ 
             backendError: 'Nothing recieved in the backend'
