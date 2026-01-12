@@ -5,15 +5,35 @@ export default function Homepage() {
   const [mood, setMood] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  const handleMoodSubmit = (e) => {
+  const handleMoodSubmit = async (e) => {
     e.preventDefault();
     if (mood.trim()) {
       setIsSearching(true);
       console.log("selected mood was:", mood); 
       
-      //TODO: instantiate the api call here from the backend.  
-    }
-  };
+      try { 
+        if (!mood || mood.trim() === ''){ 
+          console.log({ 
+            Error: 'No response given'
+          }); 
+        } 
+
+        const sendtoDj = await fetch(`http://localhost:2323/api/v1/dj?mood=${encodeURIComponent(mood)}`, { 
+          method: 'GET', 
+          headers: { 
+            'Content': 'application/json'
+          }
+        }); 
+        // backend response here as such 
+        const backendResponse = await sendtoDj.json(); 
+        console.log('The backend returned this:', backendResponse)
+      } catch (error) { 
+        console.log({ 
+          ErrorMessage: error
+        }); 
+      }
+    }  
+  }
 
   const suggestedMoods = [
     "Happy", "Relaxed", "Energetic", "Melancholic", 
