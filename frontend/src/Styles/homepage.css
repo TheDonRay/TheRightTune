@@ -5,7 +5,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
@@ -32,7 +33,7 @@ html, body {
 }
 
 .heading {
-  font-family: "Cal Sans", sans-serif; 
+  font-family: "Cal Sans", sans-serif;
   letter-spacing: 5px;
   font-size: 3rem;
   color: white;
@@ -134,7 +135,9 @@ html, body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Suggested Moods */
@@ -197,7 +200,9 @@ html, body {
   border-radius: 20px;
   padding: 2rem;
   text-align: center;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .feature-card:hover {

@@ -9,38 +9,45 @@ export default function Homepage() {
     e.preventDefault();
     if (mood.trim()) {
       setIsSearching(true);
-      console.log("selected mood was:", mood); 
-      
-      try { 
-        if (!mood || mood.trim() === ''){ 
-          console.log({ 
-            Error: 'No response given'
-          }); 
-        } 
+      console.log("selected mood was:", mood);
 
-        const sendtoDj = await fetch(`http://localhost:2323/api/v1/dj`, { 
-          method: 'POST', 
-          headers: { 
-            'Content': 'application/json'
-          }, 
-          body: JSON.stringify({ 
-            usermood: mood
-          })
-        }); 
-        // backend response here as such 
-        const backendResponse = await sendtoDj.json(); 
-        console.log('The backend returned this:', backendResponse)
-      } catch (error) { 
-        console.log({ 
-          ErrorMessage: error
-        }); 
+      try {
+        if (!mood || mood.trim() === "") {
+          console.log({
+            Error: "No response given",
+          });
+        }
+
+        const sendtoDj = await fetch(`http://localhost:2323/api/v1/dj`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            usermood: mood,
+          }),
+        });
+        // backend response here as such
+        const backendResponse = await sendtoDj.json();
+        console.log("The backend returned this:", backendResponse);
+      } catch (error) {
+        console.log({
+          ErrorMessage: error,
+        });  
+        setIsSearching(false); 
       }
-    }  
-  }
+    }
+  };
 
   const suggestedMoods = [
-    "Happy", "Relaxed", "Energetic", "Melancholic", 
-    "Motivated", "Romantic", "Nostalgic", "Peaceful"
+    "Happy",
+    "Relaxed",
+    "Energetic",
+    "Melancholic",
+    "Motivated",
+    "Romantic",
+    "Nostalgic",
+    "Peaceful",
   ];
 
   const handleMoodClick = (selectedMood) => {
@@ -53,9 +60,7 @@ export default function Homepage() {
         <h1 className="heading">
           Welcome to <span>The Right Tune</span>
         </h1>
-        <p className="subheading">
-          Discover music that matches your mood
-        </p>
+        <p className="subheading">Discover music that matches your mood</p>
       </div>
 
       <div className="mood-input-section">
@@ -69,8 +74,8 @@ export default function Homepage() {
               className="mood-input"
               disabled={isSearching}
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="submit-btn"
               disabled={isSearching || !mood.trim()}
             >
