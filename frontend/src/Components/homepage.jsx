@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState } from "react"; 
+import { useNavigate } from "react-router-dom";  
+
 import "../Styles/homepage.css";
 
 export default function Homepage() {
   const [mood, setMood] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleMoodSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +32,8 @@ export default function Homepage() {
         });
         // backend response here as such
         const backendResponse = await sendtoDj.json();
-        console.log("The backend returned this:", backendResponse);
+        console.log("The backend returned this:", backendResponse); 
+        navigate("/results", { state: { recommendations: backendResponse } }); 
       } catch (error) {
         console.log({
           ErrorMessage: error,
@@ -114,12 +118,12 @@ export default function Homepage() {
         <div className="feature-card">
           <div className="feature-icon">🔥</div>
           <h3>Mainstream Hits</h3>
-          <p>Curated from today's most popular tracks</p>
+          <p>Curated from the most popular tracks</p>
         </div>
         <div className="feature-card">
           <div className="feature-icon">✨</div>
           <h3>Instant Results</h3>
-          <p>Get your personalized playlist in seconds</p>
+          <p>Get songs that match your mood fast!</p>
         </div>
       </div>
     </div>
