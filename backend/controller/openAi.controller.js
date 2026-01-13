@@ -20,7 +20,8 @@ const parseSongsFromResponse = (response) => {
       const title = match[match.length - 2]?.trim();
       const artist = match[match.length - 1]?.trim();
       
-      if (title && artist && title.length > 0 && artist.length > 0) {
+      if (title && artist && title.length > 0 && artist.length > 0) {  
+        // push the object here as such 
         songs.push({
           title: title,
           artist: artist
@@ -44,7 +45,8 @@ const aidj = async (req, res) => {
         res.status(401).json({ 
             Error: 'No response sent to the backend',
         }); 
-    }
+    } 
+    // here i implement the openAi api code here to actaully take in the response from what the user puts. 
     const Djresponse = await client.chat.completions.create({ 
         model: "gpt-4o-mini", 
         messages: [ 
