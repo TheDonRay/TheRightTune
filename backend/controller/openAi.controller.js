@@ -1,22 +1,81 @@
-//Call the openAi library etc 
+//Call the openAi library etc
+const OpenAi = require('openai'); 
+const client = new OpenAi({ 
+    apiKey: process.env.DJKEY
+}); 
 
-//remeber the SDLC : 
+// Helper function to parse songs from OpenAI response
+const parseSongsFromResponse = (response) => {
+  const songs = [];
+  
+  // Match patterns like "1. Song Title - Artist Name" or "Song Title by Artist"
+  const songPatterns = [
+    /(\d+)\.\s*(.+?)\s*(?:-|by)\s*(.+?)(?:\n|$)/gi,  // "1. Song - Artist"
+    /^(.+?)\s*(?:-|by)\s*(.+?)$/gim  // "Song - Artist" on separate lines
+  ];
+  
+  for (const pattern of songPatterns) {
+    let match;
+    while ((match = pattern.exec(response)) !== null) {
+      const title = match[match.length - 2]?.trim();
+      const artist = match[match.length - 1]?.trim();
+      
+      if (title && artist && title.length > 0 && artist.length > 0) {
+        songs.push({
+          title: title,
+          artist: artist
+        });
+      }
+    }
+    if (songs.length > 0) break;
+  }
+  
+  return songs;
+}; 
+
+//remeber the SDLC :
 /*planning, analysis, design, implementation, testing and integration, maintanence. */
-const aidj = async (req, res) => { 
-    // implement try and catch case 
-    // for now just for testing purposes we can start of with   
-    // remember get requests should not have body params, so like waht you had before it should not have that req.body from the mood 
-    try { 
-        const { usermood } = req.body;  
-        res.status(200).json({ 
-            backendResponse: usermood
-        }); 
-        console.log('backend said:', usermood); 
-    } catch (error) { 
-        res.status(500).json({ 
-            backendError: 'Nothing recieved in the backend'
-        }); 
-    } 
-} 
+const aidj = async (req, res) => {
+  try {
+    const { usermood } = req.body; 
 
-module.exports = aidj; 
+    //case to check for usermood 
+    if (!usermood || usermood.trim() === ""){ 
+        res.status(401).json({ 
+            Error: 'No response sent to the backend',
+        }); 
+    }
+    const Djresponse = await client.chat.completions.create({ 
+        model: "gpt-4o-mini", 
+        messages: [ 
+            {
+                role: "system", 
+                content: "You are a DJ who gives music recommendations depending on a user's mood. Use mainstream music starting from 2022. Provide at least 10 songs in a numbered list format with song title and artist name like this: 1. Song Title - Artist Name"
+            }, 
+            { 
+                role: "user", 
+                content: usermood,
+            }
+        ]
+    });  
+    // Parse the OpenAI response to extract songs
+    const aiResponse = Djresponse.choices[0].message.content;
+    const songs = parseSongsFromResponse(aiResponse);
+    
+    //backend response that we can send to the frontend here 
+    res.status(200).json({ 
+        backendResponse: aiResponse,
+        usermood: usermood,
+        songs: songs
+    }); 
+    console.log("backend said:", usermood);
+  } catch (error) { 
+    console.log('The Error is:', error); 
+    res.status(500).json({
+      backendError: "DJ failed to get recommendations", 
+      DetailedError: error.message, 
+    });
+  }
+};
+
+module.exports = aidj;

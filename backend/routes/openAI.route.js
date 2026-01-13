@@ -1,7 +1,7 @@
-const express = require('express'); 
-const openAiroute = express.Router(); 
-const openAicontroller = require('../controller/openAi.controller.js'); 
+const express = require("express");
+const openAiroute = express.Router();
+const openAicontroller = require("../controller/openAi.controller.js");
 
-openAiroute.post('/dj', openAicontroller); 
+openAiroute.post("/dj", openAicontroller);
 
-module.exports = openAiroute; 
+module.exports = openAiroute;
